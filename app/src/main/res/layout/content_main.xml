@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.tarathep.bokie.japanesethaidict.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/app_bar_main">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

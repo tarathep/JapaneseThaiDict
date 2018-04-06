@@ -19,6 +19,26 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/w2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:autoText="false"
+                android:singleLine="true"
+                android:text="ます"
+                android:textColor="@color/text"
+                android:textColorHighlight="@color/text_link_highlight"
+                android:textColorLink="@color/text_link"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
                 android:id="@+id/w"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

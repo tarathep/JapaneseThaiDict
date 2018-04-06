@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="หน้าแรก" />
+        <item
+            android:id="@+id/menu_favorite"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="คำศัพท์ที่ชอบ" />
+        <item
+            android:id="@+id/menu_grammar"
+            android:icon="@drawable/ic_spellcheck_black_24dp"
+            android:title="ไวยากรณ์" />
+        <item
+            android:id="@+id/menu_wordlist"
+            android:icon="@drawable/ic_insert_drive_file_black_24dp"
+            android:title="สร้าง WordList" />
+        <item
+            android:id="@+id/menu_test"
+            android:icon="@drawable/ic_extension_black_24dp"
+            android:title="เกมส์ฝึกฝนคำศัพท์" />
+        <item
+            android:id="@+id/menu_ch"
+            android:icon="@drawable/ic_transform_black_24dp"
+            android:title="Character Converter" />
+    </group>
+
+    <item android:title="อื่นๆ">
+        <menu>
+            <item
+                android:title="ตั้งค่า"
+                android:icon="@drawable/ic_settings_black_24dp"
+                />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_info_black_24dp"
+                android:title="เกี่ยวกับ" />
+        </menu>
+    </item>
+
+</menu>

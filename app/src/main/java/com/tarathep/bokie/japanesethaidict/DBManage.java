@@ -14,6 +14,7 @@ import java.util.List;
 public class DBManage {
     Context context;
     WordList wordList;
+    GrammarList grammarList;
 
     DBManage(Context context){
         this.context = context;
@@ -116,5 +117,78 @@ public class DBManage {
         sqLiteDatabase.execSQL("UPDATE table_words SET mark='"+mask+"' WHERE word_id="+pk+"");
         dbHelper.close();
         sqLiteDatabase.close();
+    }
+    //- - - - -
+    public GrammarList queryGrammarPrimaryKey(String PK){
+        DBHelper dbHelper =new DBHelper(context);
+        try {
+            dbHelper.createDataBase();
+            dbHelper.openDataBase();
+        }
+        catch (Exception e) {e.printStackTrace();}
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqLiteDatabase.rawQuery("SELECT * FROM grammar_lists WHERE id="+PK,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            grammarList = new GrammarList(cursor.getString(cursor.getColumnIndex("id")),cursor.getString(cursor.getColumnIndex("grammar")),cursor.getString(cursor.getColumnIndex("mean")),cursor.getString(cursor.getColumnIndex("_group")),cursor.getString(cursor.getColumnIndex("mark")));
+            cursor.moveToNext();
+        }
+        dbHelper.close();
+        sqLiteDatabase.close();
+        cursor.close();
+        return grammarList;
+    }
+    public List queryGrammar(){
+        DBHelper dbHelper =new DBHelper(context);
+        try {
+            dbHelper.createDataBase();
+            dbHelper.openDataBase();
+        }
+        catch (Exception e) {e.printStackTrace();}
+
+        List list = new ArrayList();
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqLiteDatabase.rawQuery("SELECT id,grammar,mean,_group,mark FROM grammar_lists order by id asc",null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            grammarList = new GrammarList(cursor.getString(cursor.getColumnIndex("id")),cursor.getString(cursor.getColumnIndex("grammar")),cursor.getString(cursor.getColumnIndex("mean")),cursor.getString(cursor.getColumnIndex("_group")),cursor.getString(cursor.getColumnIndex("mark")));
+            list.add(grammarList);
+            cursor.moveToNext();
+        }
+        dbHelper.close();
+        sqLiteDatabase.close();
+        cursor.close();
+        return list;
+    }
+
+    public List queryGrammar(String expression){
+        DBHelper dbHelper =new DBHelper(context);
+        try {
+            dbHelper.createDataBase();
+            dbHelper.openDataBase();
+        }
+        catch (Exception e) {e.printStackTrace();}
+
+        List list = new ArrayList();
+        dbHelper = new DBHelper(context);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqLiteDatabase.rawQuery("SELECT id,grammar,mean,_group,mark FROM grammar_lists WHERE grammar LIKE '%"+expression+"%' OR mean LIKE '%"+expression+"%' order by grammar asc",null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            grammarList = new GrammarList(cursor.getString(cursor.getColumnIndex("id")),cursor.getString(cursor.getColumnIndex("grammar")),cursor.getString(cursor.getColumnIndex("mean")),cursor.getString(cursor.getColumnIndex("_group")),cursor.getString(cursor.getColumnIndex("mark")));
+            list.add(grammarList);
+            cursor.moveToNext();
+        }
+        dbHelper.close();
+        sqLiteDatabase.close();
+        cursor.close();
+        return list;
     }
 }

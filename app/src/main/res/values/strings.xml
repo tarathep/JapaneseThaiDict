@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">JapaneseThai Dict</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail">ข้อมูลคำศัพท์</string>
+    <string name="title_activity_main">พจนานุกรมไทย ญี่ปุ่น</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

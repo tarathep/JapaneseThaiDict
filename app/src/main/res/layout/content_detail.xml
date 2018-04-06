@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/txt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -72,8 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
-        android:drawableLeft="@drawable/star"
-        android:text=" Favorite"
+        android:drawableLeft="@drawable/ic_favorite_black_24dp"
+        android:text=" ชอบคำนั้"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_type" />
 
@@ -84,21 +85,73 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:backgroundTint="@color/colorGreen"
-        android:drawableLeft="@drawable/sound_vol"
-        android:text=" Speak"
+        android:drawableLeft="@drawable/ic_record_voice_over_black_24dp"
+        android:text=" ออกเสียง"
         app:layout_constraintStart_toEndOf="@+id/button_favorite"
         app:layout_constraintTop_toBottomOf="@+id/txt_type" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_copy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="12dp"
-        android:backgroundTint="@color/colorBlue"
-        android:drawableLeft="@drawable/copy"
-        android:text="Copy"
+        android:backgroundTint="@color/colorBlue2"
+        android:drawableLeft="@drawable/ic_mode_edit_black_24dp"
+        android:text="โหมดแก้ไข"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_favorite" />
+
+    <EditText
+        android:id="@+id/editText_furi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="18dp"
+        android:inputType="none|text"
+        android:singleLine="false"
+        android:textColor="@color/colorBlue"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_jp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="38dp"
+        android:inputType="none|text"
+        android:singleLine="false"
+        android:textColor="@color/colorBlue"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_th"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="147dp"
+        android:inputType="none|text|textMultiLine"
+        android:singleLine="false"
+        android:textColor="@color/colorBlue"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_romanji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="94dp"
+        android:inputType="none|text"
+        android:singleLine="false"
+        android:textColor="@color/colorBlue"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

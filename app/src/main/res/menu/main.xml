@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.tarathep.bokie.japanesethaidict.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_settings"
+
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
@@ -12,6 +13,8 @@
         android:id="@+id/menuSearch"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
+        android:visible="true"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always"></item>
+
 </menu>

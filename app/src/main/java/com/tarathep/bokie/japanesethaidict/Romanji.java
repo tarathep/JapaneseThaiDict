@@ -6,7 +6,19 @@ package com.tarathep.bokie.japanesethaidict;
 
 public class Romanji {
 
-    private static String[]DicRomanji = {"aa","a","ii","i","uu","u","ee","e","oo","o"
+    private String[]DicKana  = {"aa","あ","ii","い","uu","う","ee","え","oo","お"
+            ,"か","が","き","ぎ","く","ぐ","け","げ","こ","ご"
+            ,"さ","ざ","し","じ","す","ず","せ","ぜ","そ","ぞ"
+            ,"た","だ","ち","じ","っ","つ","tsu","て","で","と","ど"
+            ,"な","に","ぬ","ね","の"
+            ,"は","ば","ぱ","ひ","び","ぴ","ふ","ぶ","ぷ","へ","べ","ぺ","ほ","ぼ","ぽ"
+            ,"ま","み","む","め","も"
+            ,"ゃ","や","ゅ","ゆ","ょ","よ"
+            ,"ら","り","る","れ","ろ"
+            ,"ゎ","わ" ,"を","ん"};
+
+
+    private String[]DicRomanji = {"aa","a","ii","i","uu","u","ee","e","oo","o"
             ,"ka","ga","ki","gi","ku","gu","ke","ge","ko","go"
             ,"sa","za","shi","ji","su","zu","se","ze","so","zo"
             ,"ta","da","chi","ji","tsuu","tsu","tsu","te","de","to","do"
@@ -16,12 +28,35 @@ public class Romanji {
             ,"yaa","ya","yuu","yu","yoo","yo"
             ,"ra","ri","ru","re","ro"
             ,"waa","wa" ,"wo","nn"};
-    public static String convert(String jp){
+
+
+    public Romanji(){
+
+    }
+    public String toKana(String romanji){
+        String output = "";
+        for(int i=0;i<romanji.length();i++){
+            try {
+                output += DicKana[SearchIndex(""+romanji.charAt(i))];
+            }catch (IndexOutOfBoundsException e){}
+
+        }
+        return output;
+    }
+    private int SearchIndex(String input){
+        for(int i=0;i<DicRomanji.length;i++){
+            if(input.equals(DicRomanji[i])){
+                return i;
+            }
+        }
+        return -1;
+    }
+    public String convert(String jp){
         try{
            return convertCheck(jp);
         }catch(Exception e){return "";}
     }
-    private static String convertCheck(String input){
+    private String convertCheck(String input){
         String output="",sub1="",sub2="",type="";
         boolean tsuu = false;
         for(int i =0;i<input.length();i++){
@@ -77,7 +112,7 @@ public class Romanji {
         }
         return  output;
     }
-    private static String convertCHAR(String chartype, char character){
+    private String convertCHAR(String chartype, char character){
         String result="";
         int index;
         if(chartype.equals("kana"))
@@ -98,7 +133,7 @@ public class Romanji {
         }
         return result;
     }
-    private static boolean isJP(char ch){
+    private boolean isJP(char ch){
         if(isJP_KANA(ch)){
             return true;
         }else if(isJP_KATA(ch)){
@@ -107,27 +142,27 @@ public class Romanji {
             return true;
         return false;
     }
-    private static boolean isJP_KANA(char ch){
+    private boolean isJP_KANA(char ch){
         if((int)ch>=12352&&(int)ch<=12447)
             return true;
         return false;
     }
-    private static boolean isJP_KATA(char ch){
+    private boolean isJP_KATA(char ch){
         if((int)ch>=12448&&(int)ch<=12543)
             return true;
         return false;
     }
-    private static boolean isJP_KANJI(char ch){
+    private boolean isJP_KANJI(char ch){
         if((int)ch>=19968&&(int)ch<=40879)
             return true;
         return false;
     }
-    private static boolean isENG(char ch){
+    private boolean isENG(char ch){
         if((int)ch>=32&&(int)ch<=127)
             return true;
         return false;
     }
-    private static String convertROMANJI(String input){
+    private String convertROMANJI(String input){
         String output="";
         int timeout = input.length();
         DicRomanji[80] = "n";
