@@ -33,11 +33,17 @@ public class Romanji {
     public Romanji(){
 
     }
+
+
     public String toKana(String romanji){
         String output = "";
+        String ch;
         for(int i=0;i<romanji.length();i++){
             try {
-                output += DicKana[SearchIndex(""+romanji.charAt(i))];
+                do{
+                   ch =romanji.charAt(i)+"";break;
+                }while (!ch.equals("a")||!ch.equals(i)||!ch.equals("u")||!ch.equals("e")||!ch.equals("o"));
+                output += DicKana[SearchIndex(ch)];
             }catch (IndexOutOfBoundsException e){}
 
         }

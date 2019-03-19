@@ -11,7 +11,7 @@
         <item
             android:id="@+id/menu_favorite"
             android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="คำศัพท์ที่ชอบ" />
+            android:title="คำศัพท์ที่ชอบ"/>
         <item
             android:id="@+id/menu_grammar"
             android:icon="@drawable/ic_spellcheck_black_24dp"

@@ -77,7 +77,7 @@ public class GrammarListAdapter extends RecyclerView.Adapter<GrammarListAdapter.
             int start2 = WD.indexOf(h);
             int end2 = start2 + h.length();
             SpannableString word2 = new SpannableString(WD);
-            word2.setSpan(new CallToast(),start2,end2,0);
+            word2.setSpan(new StrikethroughSpan(),start2,end2,0);
             holder.wd.setText(word2);
             holder.wd.setMovementMethod(new LinkMovementMethod());
         }catch (IndexOutOfBoundsException e){

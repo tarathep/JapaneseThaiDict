@@ -1,7 +1,11 @@
 package com.tarathep.bokie.japanesethaidict;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,16 +24,22 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView recyclerView;
     private WordListAdapter mAdapter;
     private GrammarListAdapter grammarListAdapter;
-    private  DBManage dbmanage;
+    private  DBManage dbManage;
     Handler handler;
     ImageView imgbg;
     SearchView searchView;
     int page= R.id.menu_home;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -59,15 +63,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //init
         imgbg = (ImageView) findViewById(R.id.img_bg);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        dbmanage = new DBManage(getApplicationContext());
+        dbManage = new DBManage(getApplicationContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.addItemDecoration(new com.tarathep.bokie.japanesethaidict.DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         handler = new Handler();
 
+
+
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //dbManage.clearHistory();
+                dbManage.clearFavorite();
+                Snackbar.make(view, "Clear", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                active();
+            }
+        });
         active();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -84,9 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-
-
-
         MenuItem item = menu.findItem(R.id.menuSearch);
         searchView = (SearchView)item.getActionView();
         searchView.setQueryHint("ค้นหา");
@@ -94,12 +109,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                //mAdapter = new WordListAdapter(getApplicationContext(),query,dbmanage.queryWORD(query));
+                //mAdapter = new WordListAdapter(getApplicationContext(),query,dbManage.queryWORD(query));
                 //recyclerView.setAdapter(mAdapter);
 
-                grammarListAdapter = new GrammarListAdapter(getApplicationContext(),query,dbmanage.queryGrammar(query));
+                /*
+                grammarListAdapter = new GrammarListAdapter(getApplicationContext(),query,dbManage.queryGrammar(query));
                 recyclerView.setAdapter(grammarListAdapter);
+                */
                 return false;
+
             }
 
             @Override
@@ -113,12 +131,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } else if(query.startsWith("%")){
 
                         } else{
+
+
+
                             switch (page){
                                 case R.id.menu_home:
                                     imgbg.setVisibility(View.GONE);
-                                    mAdapter = new WordListAdapter(getApplicationContext(),query,dbmanage.queryWORD(query));
+
+                                    mAdapter = new WordListAdapter(getApplicationContext(),query,dbManage.getQueryDict(query));
                                     recyclerView.setAdapter(mAdapter);
+
                                     break;
+
+
                                 case R.id.menu_grammar:
                                     final String q;
 
@@ -129,13 +154,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                         q = query;
                                     }
 
-                                    grammarListAdapter = new GrammarListAdapter(getApplicationContext(),q,dbmanage.queryGrammar(q));
+                                    grammarListAdapter = new GrammarListAdapter(getApplicationContext(),q,dbManage.queryGrammar(q));
                                     recyclerView.setAdapter(grammarListAdapter);
                                     break;
                             }
-
                         }
-
                     }
                 },1000);
 
@@ -170,27 +193,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.menu_test:
                 id = R.id.menu_test;
+                startActivity( new Intent(getApplicationContext(),GameActivity.class));
                 break;
             case R.id.menu_ch:
                 id = R.id.menu_ch;
                 break;
         }
 
-        /*
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -201,21 +210,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void active(){
         switch (page){
             case R.id.menu_home:
-                mAdapter = new WordListAdapter(getApplicationContext(),"", dbmanage.queryFavorite(1));
-                recyclerView.setAdapter(mAdapter);
+                setRecyclerView("", dbManage.getHistory());
+                break;
+            case R.id.menu_favorite:
+                Toast.makeText(getApplicationContext(),"Favorite",Toast.LENGTH_SHORT).show();
+                setRecyclerView("", dbManage.getFavorite());
                 break;
             case R.id.menu_grammar:
-                grammarListAdapter = new GrammarListAdapter(getApplicationContext(),"", dbmanage.queryGrammar());
-                recyclerView.setAdapter(grammarListAdapter);
+                setRecyclerView("",dbManage.queryGrammar());
+                break;
+            case R.id.menu_test:
+
                 break;
 
         }
 
-        if(dbmanage.queryFavorite(1).size()==0){
+    }
+
+    private void setRecyclerView(String search,List list){
+        switch (page){
+            case R.id.menu_home:
+                mAdapter = new WordListAdapter(getApplicationContext(),search, list);
+                recyclerView.setAdapter(mAdapter);
+                break;
+            case R.id.menu_favorite:
+                mAdapter = new WordListAdapter(getApplicationContext(),search, list);
+                recyclerView.setAdapter(mAdapter);
+                break;
+            case R.id.menu_test:
+                grammarListAdapter = new GrammarListAdapter(getApplicationContext(),"", list);
+                recyclerView.setAdapter(grammarListAdapter);
+                break;
+        }
+
+
+        background(list.size());
+    }
+
+    private void background(int size){
+        if(size==0){
             imgbg.setVisibility(View.VISIBLE);
         }else {
             imgbg.setVisibility(View.GONE);
         }
-
     }
+
+    @Override
+    protected void onResume() {
+        active();
+        super.onResume();
+    }
+
+
 }

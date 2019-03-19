@@ -1,24 +1,29 @@
 package com.tarathep.bokie.japanesethaidict;
 
-import android.app.Activity;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
     TextView txt_jp,txt_kana,txt_th,txt_type,txt_romanji;
-    Button btn_favorite,btn_speak,btn_copy;
+    Button btn_favorite,btn_speak,btn_copy,btn_bushu;
     EditText editText_furi,editText_jp,editText_th,editText_romanji;
     String[] W;
 
-    boolean state_copy = true;
+
+    private boolean state_copy = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +36,6 @@ public class DetailActivity extends AppCompatActivity {
         //getSupportActionBar().setTitle("JapaneseThai Dict");
 
 
-
         txt_jp = (TextView) findViewById(R.id.txt_jp);
         txt_kana = (TextView) findViewById(R.id.txt_kana);
         txt_th = (TextView) findViewById(R.id.txt_th);
@@ -41,6 +45,8 @@ public class DetailActivity extends AppCompatActivity {
         btn_favorite = (Button) findViewById(R.id.button_favorite);
         btn_speak = (Button) findViewById(R.id.button_speak);
         btn_copy = (Button) findViewById(R.id.button_copy);
+        btn_bushu = (Button) findViewById(R.id.button_bushu);
+
 
         editText_furi = (EditText) findViewById(R.id.editText_furi);
         editText_jp = (EditText) findViewById(R.id.editText_jp);
@@ -52,14 +58,24 @@ public class DetailActivity extends AppCompatActivity {
         editText_romanji.setVisibility(View.GONE);
         editText_th.setVisibility(View.GONE);
 
+        //set history into word list
+       // new DBManage(getApplicationContext()).clearHistory();
+
+
+        new DBManage(getApplicationContext()).updateHistory(W[0]);
+
+        //Toast.makeText(this,new DBManage(getApplicationContext()).getLastHistory()+"",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Clear!",Toast.LENGTH_SHORT).show();
         active();
+
+
         btn_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(new DBManage(getApplicationContext()).queryPrimaryKey(W[0]).getMark().equals("1")){
-                    new DBManage(getApplicationContext()).updateMask(W[0],"0");
+                if(new DBManage(getApplicationContext()).queryPrimaryKey (W[0]).getFavorite() == null){
+                    new DBManage(getApplicationContext()).Like(W[0]);
                 }else {
-                    new DBManage(getApplicationContext()).updateMask(W[0],"1");
+                    new DBManage(getApplicationContext()).UnLike(W[0]);
                 }
                 active();
             }
@@ -97,15 +113,49 @@ public class DetailActivity extends AppCompatActivity {
                     btn_copy.setBackgroundTintList(DetailActivity.this.getResources().getColorStateList(R.color.colorBlue2));
                 }
 
+
             }
         });
 
+        final Handler handler = new Handler();
+        btn_speak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TTS(DetailActivity.this).setLocale(Locale.JAPAN).speak(W[1]);
+
+                btn_speak.setBackgroundTintList(DetailActivity.this.getResources().getColorStateList(R.color.colorGreen));
+                txt_jp.setTextColor(DetailActivity.this.getResources().getColor(R.color.colorGreen));
+               handler.postDelayed(new Runnable() {
+                   @Override
+                   public void run() {
+
+                       if(new DBManage(getApplicationContext()).queryPrimaryKey(W[0]).getFavorite().equals("1")){
+                           txt_jp.setTextColor(DetailActivity.this.getResources().getColor(R.color.colorRed));
+                       }else {
+                           txt_jp.setTextColor(DetailActivity.this.getResources().getColor(R.color.text));
+                       }
+                       btn_speak.setBackgroundTintList(DetailActivity.this.getResources().getColorStateList(R.color.colorGreen2));
+
+                   }
+               },1000);
+            }
+        });
+
+
+        btn_bushu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),BushuActivity.class);
+                intent.putExtra("msg_key",W);
+                DetailActivity.this.startActivity(intent);
+            }
+        });
     }
 
+
     private void active(){
-        if(new DBManage(getApplicationContext()).queryPrimaryKey(W[0]).getMark().equals("1")){
+        if(new DBManage(getApplicationContext()).queryPrimaryKey (W[0]).getFavorite() != null){
             btn_favorite.setBackgroundTintList(this.getResources().getColorStateList(R.color.colorRed));
-            //btn_favorite.setText("");
             txt_jp.setTextColor(this.getResources().getColor(R.color.colorRed));
         }else {
             btn_favorite.setBackgroundTintList(this.getResources().getColorStateList(R.color.colorRed2));
@@ -113,6 +163,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
     }
+
     private String MutiLineSymbol(String input){
         String output="";
         String[] tmp = input.split(",");
@@ -127,5 +178,11 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }

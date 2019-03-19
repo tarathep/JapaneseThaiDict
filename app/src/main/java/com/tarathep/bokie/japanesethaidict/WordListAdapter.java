@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,7 +64,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
         w_col[0] = wordLists.get(position).getId();
         w_col[1] = wordLists.get(position).getJp();w_col[2] = wordLists.get(position).getKana();
         w_col[3] = wordLists.get(position).getTh();w_col[4] = wordLists.get(position).getType();
-        w_col[5] = wordLists.get(position).getRomanji();w_col[6] = wordLists.get(position).getMark();
+        w_col[5] = wordLists.get(position).getRomanji();w_col[6] = wordLists.get(position).getRomanji();
 
         final String W = w_col[1]+" 「"+w_col[5]+"」";
         final String WD = w_col[3]+" "+w_col[4];
@@ -73,7 +74,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
             int start = W.indexOf(h);
             int end = start + h.length();
             SpannableString word = new SpannableString(W);
-            word.setSpan(new CallToast(),start,end,0);
+            word.setSpan(new TextHighlight(context),start,end,0);
             holder.w.setText(word);
             holder.w.setMovementMethod(new LinkMovementMethod());
 
@@ -85,7 +86,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
             int start2 = WD.indexOf(h);
             int end2 = start2 + h.length();
             SpannableString word2 = new SpannableString(WD);
-            word2.setSpan(new CallToast(),start2,end2,0);
+            word2.setSpan(new TextHighlight(context),start2,end2,0);
             holder.wd.setText(word2);
             holder.wd.setMovementMethod(new LinkMovementMethod());
         }catch (IndexOutOfBoundsException e){
@@ -95,27 +96,21 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
         holder.w.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,DetailActivity.class);
-                intent.putExtra("message_key",w_col);
-                context.startActivity(intent);
+                intentDetailActivity(w_col);
             }
         });
 
         holder.wd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,DetailActivity.class);
-                intent.putExtra("message_key",w_col);
-                context.startActivity(intent);
+                intentDetailActivity(w_col);
             }
         });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,DetailActivity.class);
-                intent.putExtra("message_key",w_col);
-                context.startActivity(intent);
+               intentDetailActivity(w_col);
             }
         });
     }
@@ -125,4 +120,9 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
         return wordLists.size();
     }
 
+    private void intentDetailActivity(String[] w_col){
+        Intent intent = new Intent(context,DetailActivity.class);
+        intent.putExtra("message_key",w_col);
+        context.startActivity(intent);
+    }
 }
